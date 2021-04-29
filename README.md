@@ -58,6 +58,7 @@ This repository provides the code to predict human fMRI responses for videos fro
   * For ```full_track``` please run ```python prepare_submission.py -t full_track```
 * With the default arguments, the script expects the results from step 2 in a directory ```./results/alexnet_devkit/layer_5```. It prepares the submission for all 9 ROIs (```mini_track```) . To generate results for ```full_track``` change the arguments as mentioned above.
 * The script creates a Pickle and a zip file (containing the Pickle file) for the corresponding track that can then be submitted for participation in the challenge.
+* Submit the ```mini_track``` results <a href="https://competitions.codalab.org/competitions/30930?secret_key=0d92787c-69d7-4e38-9780-94dd3a301f6b#participate-submit_results">here</a> and ```full_track``` results <a href="https://competitions.codalab.org/competitions/30937?secret_key=f3d0f352-c582-49cb-ad7c-8e6ec9702054#participate-submit_results">here</a> 
 
 <details>
 <summary>Arguments:</summary>
@@ -72,5 +73,12 @@ This repository provides the code to predict human fMRI responses for videos fro
 If you use our code, partly or as is,  please cite the paper below
 
 ```
-
+@misc{cichy2021algonauts,
+      title={The Algonauts Project 2021 Challenge: How the Human Brain Makes Sense of a World in Motion}, 
+      author={R. M. Cichy and K. Dwivedi and B. Lahner and A. Lascelles and P. Iamshchinina and M. Graumann and A. Andonian and N. A. R. Murty and K. Kay and G. Roig and A. Oliva},
+      year={2021},
+      eprint={2104.13714},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 ```
