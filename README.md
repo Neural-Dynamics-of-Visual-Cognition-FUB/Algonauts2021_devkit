@@ -7,7 +7,7 @@ This repository provides the code to predict human fMRI responses for videos fro
 ## Setup
 * Install <a href="https://docs.anaconda.com/anaconda/install/">anaconda</a>
 * Clone the repository ```git clone https://github.com/Neural-Dynamics-of-Visual-Cognition-FUB/Algonauts2021_devkit.git```
-* Change working directory ```cd Algonauts2021-devkit```
+* Change working directory ```cd Algonauts2021_devkit```
 * Run ```conda create -n Algonauts2021 python=3.7 anaconda``` to setup a new conda environment with required libraries
 * Activate environment ```conda activate Algonauts2021```
 * Install <a href="https://nilearn.github.io/introduction.html#installation">nilearn </a>, <a href="https://pytorch.org/">pytorch </a> and <a href="https://github.com/opencv/opencv-python">opencv </a>
