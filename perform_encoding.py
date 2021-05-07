@@ -117,14 +117,14 @@ def predict_fmri_fast(train_activations, test_activations, train_fmri,use_gpu=Fa
 def main():
 
     parser = argparse.ArgumentParser(description='Encoding model analysis for Algonauts 2021')
-    parser.add_argument('-rd','--result_dir', help='saves predicted fMRI activity',default = './results', type=str)
-    parser.add_argument('-ad','--activation_dir',help='directory containing DNN activations',default = './alexnet/', type=str)
+    parser.add_argument('-rd','--result_dir', help='saves predicted fMRI activity',default = './data/results', type=str)
+    parser.add_argument('-ad','--activation_dir',help='directory containing DNN activations',default = './data/alexnet/', type=str)
     parser.add_argument('-model','--model',help='model name under which predicted fMRI activity will be saved', default = 'alexnet_devkit', type=str)
     parser.add_argument('-l','--layer',help='layer from which activations will be used to train and predict fMRI activity', default = 'layer_5', type=str)
     parser.add_argument('-sub','--sub',help='subject number from which real fMRI data will be used', default = 'sub04', type=str)
     parser.add_argument('-r','--roi',help='brain region, from which real fMRI data will be used', default = 'EBA', type=str)
     parser.add_argument('-m','--mode',help='test or val, val returns mean correlation by using 10% of training data for validation', default = 'val', type=str)
-    parser.add_argument('-fd','--fmri_dir',help='directory containing fMRI activity', default = './participants_data_v2021', type=str)
+    parser.add_argument('-fd','--fmri_dir',help='directory containing fMRI activity', default = './data/participants_data_v2021', type=str)
     parser.add_argument('-v','--visualize',help='visualize whole brain results in MNI space or not', default = True, type=bool)
     parser.add_argument('-b', '--batch_size',help=' number of voxel to fit at one time in case of memory constraints', default = 1000, type=int)
     args = vars(parser.parse_args())

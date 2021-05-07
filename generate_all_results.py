@@ -24,7 +24,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Generates predictions for all subs all ROIs for a given track')
     parser.add_argument('-t','--track', help='mini_track for all ROIs, full_track for whole brain (WB)', default = 'mini_track', type=str)
-    parser.add_argument('-fd','--fmri_dir',help='directory containing fMRI activity', default = './participants_data_v2021', type=str)
+    parser.add_argument('-fd','--fmri_dir',help='directory containing fMRI activity', default = './data/participants_data_v2021', type=str)
 
     args = vars(parser.parse_args())
     track = args['track']
