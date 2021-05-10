@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 
@@ -51,7 +52,7 @@ class AlexNet(nn.Module):
             nn.Linear(4096, num_classes),
             )
 
-    def forward(self, x):
+    def forward(self, x) -> tuple:
         out1 = self.conv1(x)
         out2 = self.conv2(out1)
         out3 = self.conv3(out2)
@@ -75,5 +76,36 @@ def alexnet(pretrained=False, **kwargs):
     model = AlexNet(**kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['alexnet']))
+    return model
+
+def load_alexnet(model_checkpoints):
+    """This function initializes an Alexnet and load
+    its weights from a pretrained model
+    ----------
+    model_checkpoints : str
+        model checkpoints location.
+
+    Returns
+    -------
+    model
+        pytorch model of alexnet
+
+    """
+
+
+    model = alexnet()
+    model_file = model_checkpoints
+    checkpoint = torch.load(model_file, map_location=lambda storage, loc: storage)
+    model_dict =["conv1.0.weight", "conv1.0.bias", "conv2.0.weight", "conv2.0.bias", "conv3.0.weight", "conv3.0.bias", "conv4.0.weight", "conv4.0.bias", "conv5.0.weight", "conv5.0.bias", "fc6.1.weight", "fc6.1.bias", "fc7.1.weight", "fc7.1.bias", "fc8.1.weight", "fc8.1.bias"]
+    state_dict={}
+    i=0
+    for k,v in checkpoint.items():
+        state_dict[model_dict[i]] =  v
+        i+=1
+
+    model.load_state_dict(state_dict)
+    if torch.cuda.is_available():
+        model.cuda()
+    model.eval()
     return model
 
