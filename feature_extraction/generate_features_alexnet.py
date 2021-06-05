@@ -59,8 +59,10 @@ def get_video_from_mp4(file, sampling_rate):
     ret = True
     while fc < frameCount and ret:
         fc += 1
+        (ret, frame) = cap.read()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         if fc % sampling_rate == 0:
-            (ret, buf[int((fc - 1) / sampling_rate)]) = cap.read()
+            buf[int((fc - 1) / sampling_rate)] = frame
 
     cap.release()
     return np.expand_dims(buf, axis=0),int(frameCount / sampling_rate)
