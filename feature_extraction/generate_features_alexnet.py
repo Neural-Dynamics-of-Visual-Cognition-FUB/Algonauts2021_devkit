@@ -83,10 +83,7 @@ def sample_video_from_mp4(file, num_frames=16):
     total_frames = len(vr)
     indices = np.linspace(0,total_frames-1,num_frames,dtype=np.int)
     for seg_ind in indices:
-        try:
-            images.append(Image.fromarray(vr[seg_ind-1].asnumpy()))
-        except Exception as e:
-            images.append(Image.fromarray(vr[0].asnumpy()))
+        images.append(Image.fromarray(vr[seg_ind].asnumpy()))
     return images,num_frames
 
 def get_activations_and_save(model, video_list, activations_dir, sampling_rate = 4):
