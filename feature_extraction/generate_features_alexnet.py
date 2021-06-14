@@ -19,6 +19,8 @@ from PIL import Image
 from sklearn.preprocessing import StandardScaler
 from torch.autograd import Variable as V
 from sklearn.decomposition import PCA, IncrementalPCA
+from decord import VideoReader
+from decord import cpu
 
 seed = 42
 # Torch RNG
@@ -28,45 +30,6 @@ torch.cuda.manual_seed_all(seed)
 # Python RNG
 np.random.seed(seed)
 random.seed(seed)
-
-
-def get_video_from_mp4(file, sampling_rate):
-    """This function takes a mp4 video file as input and returns
-    an array of frames in numpy format.
-
-    Parameters
-    ----------
-    file : str
-        path to mp4 video file
-    sampling_rate : int
-        how many frames to skip when doing frame sampling.
-
-    Returns
-    -------
-    video: np.array
-
-    num_frames: int
-        number of frames extracted
-
-    """
-    cap = cv2.VideoCapture(file)
-    frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    frameWidth = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    frameHeight = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    buf = np.empty((int(frameCount / sampling_rate), frameHeight,
-                   frameWidth, 3), np.dtype('uint8'))
-    fc = 0
-    ret = True
-    while fc < frameCount and ret:
-        fc += 1
-        (ret, frame) = cap.read()
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        if fc % sampling_rate == 0:
-            buf[int((fc - 1) / sampling_rate)] = frame
-
-    cap.release()
-    return np.expand_dims(buf, axis=0),int(frameCount / sampling_rate)
-
 
 def load_alexnet(model_checkpoints):
     """This function initializes an Alexnet and load
@@ -100,9 +63,34 @@ def load_alexnet(model_checkpoints):
     return model
 
 
+def sample_video_from_mp4(file, num_frames=16):
+    """This function takes a mp4 video file as input and returns
+    an array of uniformly sampled frames in numpy format.
+    Parameters
+    ----------
+    file : str
+        path to mp4 video file
+    num_frames : int
+        how many frames to select using uniform frame sampling.
+    Returns
+    -------
+    video: np.array
+    num_frames: int
+        number of frames extracted
+    """
+    images = list()
+    vr = VideoReader(file, ctx=cpu(0))
+    total_frames = len(vr)
+    indices = np.linspace(0,total_frames-1,num_frames,dtype=np.int)
+    for seg_ind in indices:
+        try:
+            images.append(Image.fromarray(vr[seg_ind-1].asnumpy()))
+        except Exception as e:
+            images.append(Image.fromarray(vr[0].asnumpy()))
+    return images,num_frames
+
 def get_activations_and_save(model, video_list, activations_dir, sampling_rate = 4):
     """This function generates Alexnet features and save them in a specified directory.
-
     Parameters
     ----------
     model :
@@ -113,22 +101,19 @@ def get_activations_and_save(model, video_list, activations_dir, sampling_rate =
         save path for extracted features.
     sampling_rate : int
         how many frames to skip when feeding into the network.
-
     """
 
-    centre_crop = trn.Compose([
-            trn.ToPILImage(),
+    resize_normalize = trn.Compose([
             trn.Resize((224,224)),
             trn.ToTensor(),
             trn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
     for video_file in tqdm(video_list):
-        vid,num_frames = get_video_from_mp4(video_file, sampling_rate)
+        vid,num_frames = sample_video_from_mp4(video_file)
         video_file_name = os.path.split(video_file)[-1].split(".")[0]
         activations = []
-        for frame in range(num_frames):
-            img =  vid[0,frame,:,:,:]
-            input_img = V(centre_crop(img).unsqueeze(0))
+        for frame,img in enumerate(vid):
+            input_img = V(resize_normalize(img).unsqueeze(0))
             if torch.cuda.is_available():
                 input_img=input_img.cuda()
             x = model.forward(input_img)
@@ -139,7 +124,9 @@ def get_activations_and_save(model, video_list, activations_dir, sampling_rate =
                     activations[i] =  activations[i] + feat.data.cpu().numpy().ravel()
         for layer in range(len(activations)):
             save_path = os.path.join(activations_dir, video_file_name+"_"+"layer" + "_" + str(layer+1) + ".npy")
-            np.save(save_path,activations[layer]/float(num_frames))
+            avg_layer_activation = activations[layer]/float(num_frames)
+            np.save(save_path,avg_layer_activation)
+
 
 
 def do_PCA_and_save(activations_dir, save_dir):
@@ -174,7 +161,7 @@ def do_PCA_and_save(activations_dir, save_dir):
         start_time = time.time()
         x_test = StandardScaler().fit_transform(x_test)
         x_train = StandardScaler().fit_transform(x_train)
-        ipca = PCA(n_components=n_components)#, batch_size=20)
+        ipca = PCA(n_components=n_components,random_state=seed)
         ipca.fit(x_train)
 
         x_train = ipca.transform(x_train)
