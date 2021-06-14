@@ -65,7 +65,7 @@ def load_alexnet(model_checkpoints):
 
 def sample_video_from_mp4(file, num_frames=16):
     """This function takes a mp4 video file as input and returns
-    an array of uniformly sampled frames in numpy format.
+    a list of uniformly sampled frames (PIL Image).
     Parameters
     ----------
     file : str
@@ -74,7 +74,7 @@ def sample_video_from_mp4(file, num_frames=16):
         how many frames to select using uniform frame sampling.
     Returns
     -------
-    video: np.array
+    images: list of PIL Images
     num_frames: int
         number of frames extracted
     """
