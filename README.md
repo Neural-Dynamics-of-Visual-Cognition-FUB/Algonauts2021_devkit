@@ -10,7 +10,7 @@ This repository provides the code to predict human fMRI responses for videos fro
 * Change working directory ```cd Algonauts2021_devkit```
 * Run ```conda create -n Algonauts2021 python=3.7 anaconda``` to setup a new conda environment with required libraries
 * Activate environment ```conda activate Algonauts2021```
-* Install <a href="https://nilearn.github.io/introduction.html#installation">nilearn </a>, <a href="https://pytorch.org/">pytorch </a>, <a href="https://pytorch.org/">pytorch </a>, <a href="https://github.com/dmlc/decord#installation">decord </a> and <a href="https://github.com/opencv/opencv-python">opencv </a>
+* Install <a href="https://nilearn.github.io/introduction.html#installation">nilearn </a>, <a href="https://pytorch.org/">pytorch </a>, <a href="https://github.com/dmlc/decord#installation">decord </a> and <a href="https://github.com/opencv/opencv-python">opencv </a>
 * Download the data <a href="https://forms.gle/qq9uqqu6SwN8ytxQ9">here</a> (if not already downloaded)and unzip in the working directory. Data is organized in two directories
    * AlgonautsVideos268_All_30fpsmax : contains 1102 videos: training (first 1000) and test (last 102) videos.
    * participants_data_v2021 : contains fMRI responses to training videos for both the challenge tracks.
