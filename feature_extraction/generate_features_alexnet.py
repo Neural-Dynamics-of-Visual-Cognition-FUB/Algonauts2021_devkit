@@ -86,7 +86,7 @@ def sample_video_from_mp4(file, num_frames=16):
         images.append(Image.fromarray(vr[seg_ind].asnumpy()))
     return images,num_frames
 
-def get_activations_and_save(model, video_list, activations_dir, sampling_rate = 4):
+def get_activations_and_save(model, video_list, activations_dir):
     """This function generates Alexnet features and save them in a specified directory.
     Parameters
     ----------
@@ -96,8 +96,6 @@ def get_activations_and_save(model, video_list, activations_dir, sampling_rate =
         the list contains path to all videos.
     activations_dir : str
         save path for extracted features.
-    sampling_rate : int
-        how many frames to skip when feeding into the network.
     """
 
     resize_normalize = trn.Compose([
