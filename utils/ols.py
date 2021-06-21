@@ -73,16 +73,6 @@ class OLS_pytorch(object):
         prediction = np.squeeze(prediction).T
         return prediction
 
-    def score(self):
-        prediction = torch.matmul(self.X,self.coefficients)
-        prediction = prediction
-        yhat = prediction
-        ybar = (torch.sum(self.y,dim=1, keepdim=True)/self.y.shape[1]).unsqueeze(2)
-        ssreg = torch.sum((yhat-ybar)**2,dim=1, keepdim=True)
-        sstot = torch.sum((self.y.unsqueeze(2) - ybar)**2,dim=1, keepdim=True)
-        score = ssreg / sstot
-        return score.cpu().numpy().ravel()
-
     def _reshape_x(self,X):
         return X.reshape(-1,1)
 
