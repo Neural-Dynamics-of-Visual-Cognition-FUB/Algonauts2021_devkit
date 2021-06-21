@@ -1,5 +1,9 @@
 # Algonauts2021-devkit
 
+| Update: To make participation simpler, we have created a <a href="https://colab.research.google.com/drive/1FljzKYPtE5sYoSHQ4g02re3iruEPI0Vz?usp=sharing">Google Colab </a> where you can prepare challenge submission online.|
+|------------------------------------------------------------------------|
+
+
 This repository provides the code to predict human fMRI responses for videos from features of a baseline deep neural network (DNN) model (AlexNet). We further provide scripts to prepare the submission for the Algonauts 2021 challenge.  The terms features and activations are used interchangeably in the code.
 
 **IMPORTANT: The Alexnet example is provided to explain how to prepare submissions using a baseline model. Please prepare your results in same format to participate in the challenge.!**
@@ -30,7 +34,7 @@ This repository provides the code to predict human fMRI responses for videos fro
 
 ## Step 2: Predict fMRI responses
 * Run ```python perform_encoding.py``` to create predicted fMRI responses for test videos based on AlexNet features **or custom Neural Network Layers**
-* With the default arguments, the script expects a directory ````./participants_data_v2021```` with real fMRI data and ````./alexnet/```` with extracted NN features. It will generate predicted features using Alexnet (````--model````) layer_5 (````--layer````) for EBA (````--roi````) of subject 4 (````--sub````) in validation mode (````--mode````). The results will be stored in a directory called ````./results````. Running the script in default mode should return a mean correlation of 0.23
+* With the default arguments, the script expects a directory ````./participants_data_v2021```` with real fMRI data and ````./alexnet/```` with extracted NN features. It will generate predicted features using Alexnet (````--model````) layer_5 (````--layer````) for EBA (````--roi````) of subject 4 (````--sub````) in validation mode (````--mode````). The results will be stored in a directory called ````./results````. Running the script in default mode should return a mean correlation of 0.219
 * Example command for whole brain data (will take several minutes): ```python perform_encoding.py -rd ./results -ad ./alexnet/ -model alexnet_devkit -l layer_5 -sub sub01 -r WB -m val -fd ./participants_data_v2021 -v True -b 1000```
 
 <details>
